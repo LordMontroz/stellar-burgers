@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { TIngredient, RequestStatus } from '../utils/types';
 import { getIngredientsApi } from '../utils/burger-api';
-interface IngredientState {
+export interface IngredientState {
   data: TIngredient[];
   status: RequestStatus;
 }
-const initialState: IngredientState = {
+export const initialState: IngredientState = {
   data: [],
   status: RequestStatus.Idle
 };
@@ -40,4 +40,3 @@ export const ingredientsSlice = createSlice({
 });
 export const { selectIngredients, getLoadIngredients } =
   ingredientsSlice.selectors;
-export const {} = ingredientsSlice.actions;

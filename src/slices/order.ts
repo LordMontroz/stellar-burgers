@@ -1,18 +1,18 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { v4 as uuidv4 } from 'uuid';
+import { RequestStatus, TOrder } from '@utils-types';
 import {
-  TConstructorIngredient,
-  RequestStatus,
-  TOrder,
-  TIngredient
-} from '../utils/types';
-import { TNewOrderResponse, orderBurgerApi } from '../utils/burger-api';
+  TNewOrderResponse,
+  TOrderResponse,
+  getOrderByNumberApi,
+  orderBurgerApi
+} from '../utils/burger-api';
 import { clearBurgerConstructor } from './burgerConstructor';
-interface orderState {
+
+export interface OrderState {
   info: TOrder | null;
   status: RequestStatus;
 }
-const initialState: orderState = {
+export const initialState: OrderState = {
   info: null,
   status: RequestStatus.Idle
 };
@@ -24,7 +24,16 @@ export const createOrder = createAsyncThunk(
     return data;
   }
 );
-const orderSlice = createSlice({
+
+export const getOrder = createAsyncThunk(
+  'order/getId',
+  async (id_order: number) => {
+    const data = await getOrderByNumberApi(id_order);
+    return data;
+  }
+);
+
+export const orderSlice = createSlice({
   name: 'order',
   initialState,
   reducers: {
@@ -33,8 +42,8 @@ const orderSlice = createSlice({
     }
   },
   selectors: {
-    selectStatus: (sliceState: orderState) => sliceState.status,
-    selectInfo: (sliceState: orderState) => sliceState.info
+    selectStatus: (sliceState: OrderState) => sliceState.status,
+    selectInfo: (sliceState: OrderState) => sliceState.info
   },
   extraReducers: (builder) => {
     builder
@@ -50,9 +59,22 @@ const orderSlice = createSlice({
       )
       .addCase(createOrder.rejected, (state) => {
         state.status = RequestStatus.Failed;
+      })
+      .addCase(getOrder.pending, (state) => {
+        state.status = RequestStatus.Loading;
+      })
+      .addCase(
+        getOrder.fulfilled,
+        (state, { payload }: PayloadAction<TOrderResponse>) => {
+          state.status = RequestStatus.Success;
+          state.info = payload.orders[0];
+        }
+      )
+      .addCase(getOrder.rejected, (state) => {
+        state.status = RequestStatus.Failed;
       });
   }
 });
+
 export const { selectStatus, selectInfo } = orderSlice.selectors;
 export const { clearInfo } = orderSlice.actions;
-export default orderSlice.reducer;
