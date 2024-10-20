@@ -29,7 +29,7 @@
 1. Клонируйте репозиторий:
     
     ```bash
-    git clone <https://github.com/Andrpre/stellar-burger.git>
+    git clone <https://github.com/LordMontroz/stellar-burger.git>
     ```
     
 2. Перейдите в папку с проектом:
