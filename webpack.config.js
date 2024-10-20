@@ -83,12 +83,16 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, './dist'),
+    publicPath: '/projects/stellar-burger/',
     filename: 'bundle.js'
   },
   devServer: {
     static: path.join(__dirname, './dist'),
     compress: true,
     historyApiFallback: true,
-    port: 4000
+    port: 4000,
+    open: {
+      target: 'projects/stellar-burger'
+    }
   }
 };
