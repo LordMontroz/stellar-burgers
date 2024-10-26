@@ -1,12 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { v4 as uuidv4 } from 'uuid';
-import {
-  TConstructorIngredient,
-  RequestStatus,
-  TOrder,
-  TIngredient
-} from '../utils/types';
-
+import { RequestStatus, TOrder } from '@utils-types';
 import { TNewOrderResponse, orderBurgerApi } from '../utils/burger-api';
 import { clearBurgerConstructor } from './burgerConstructor';
 
@@ -14,6 +7,7 @@ interface orderState {
   info: TOrder | null;
   status: RequestStatus;
 }
+
 const initialState: orderState = {
   info: null,
   status: RequestStatus.Idle
@@ -28,7 +22,7 @@ export const createOrder = createAsyncThunk(
   }
 );
 
-const orderSlice = createSlice({
+export const orderSlice = createSlice({
   name: 'order',
   initialState,
   reducers: {
@@ -60,4 +54,3 @@ const orderSlice = createSlice({
 
 export const { selectStatus, selectInfo } = orderSlice.selectors;
 export const { clearInfo } = orderSlice.actions;
-export default orderSlice.reducer;
