@@ -1,3 +1,5 @@
+// Шаг 1. Роутинг
+
 import {
   ConstructorPage,
   Feed,

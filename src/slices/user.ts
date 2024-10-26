@@ -3,21 +3,26 @@ import {
   TRegisterData,
   getUserApi,
   loginUserApi,
-  registerUserApi
+  logoutApi,
+  registerUserApi,
+  updateUserApi
 } from '@api';
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RequestStatus, TUser } from '@utils-types';
-import { getCookie, setCookie } from '../utils/cookie';
+import { deleteCookie, setCookie } from '../utils/cookie';
+
 export interface TUserState {
   isAuthChecked: boolean;
   data: TUser | null;
   requestStatus: RequestStatus;
 }
+
 const initialState: TUserState = {
   isAuthChecked: false,
   data: null,
   requestStatus: RequestStatus.Idle
 };
+
 export const loginUser = createAsyncThunk(
   'user/loginUser',
   async ({ email, password }: TLoginData) => {
@@ -28,6 +33,7 @@ export const loginUser = createAsyncThunk(
     return data.user;
   }
 );
+
 export const registerUser = createAsyncThunk(
   'user/registerUser',
   async ({ email, name, password }: TRegisterData) => {
@@ -38,18 +44,31 @@ export const registerUser = createAsyncThunk(
     return data.user;
   }
 );
+
 export const checkUserAuth = createAsyncThunk('user/checkUser', async () => {
   const data = await getUserApi();
   return data.user;
 });
+
+export const logoutUser = createAsyncThunk('user/logoutUser', async () => {
+  logoutApi().then(() => {
+    localStorage.clear();
+    deleteCookie('accessToken');
+  });
+});
+
+export const updateUser = createAsyncThunk(
+  'user/updateUser',
+  async ({ email, name, password }: TRegisterData) => {
+    const data = await updateUserApi({ email, name, password });
+    return data.user;
+  }
+);
+
 export const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {
-    authChecked: (state) => {
-      state.isAuthChecked = true;
-    }
-  },
+  reducers: {},
   selectors: {
     isAuthCheckedSelector: (sliceState: TUserState) => sliceState.isAuthChecked,
     userDataSelector: (sliceState: TUserState) => sliceState.data,
@@ -59,6 +78,7 @@ export const userSlice = createSlice({
     builder
       .addCase(loginUser.pending, (state) => {
         state.requestStatus = RequestStatus.Loading;
+        state.isAuthChecked = false;
       })
       .addCase(loginUser.rejected, (state) => {
         state.requestStatus = RequestStatus.Failed;
@@ -74,6 +94,7 @@ export const userSlice = createSlice({
       )
       .addCase(registerUser.pending, (state) => {
         state.requestStatus = RequestStatus.Loading;
+        state.isAuthChecked = false;
       })
       .addCase(registerUser.rejected, (state) => {
         state.requestStatus = RequestStatus.Failed;
@@ -87,8 +108,25 @@ export const userSlice = createSlice({
           state.isAuthChecked = true;
         }
       )
+      .addCase(updateUser.pending, (state) => {
+        state.requestStatus = RequestStatus.Loading;
+        state.isAuthChecked = false;
+      })
+      .addCase(updateUser.rejected, (state) => {
+        state.requestStatus = RequestStatus.Failed;
+        state.isAuthChecked = true;
+      })
+      .addCase(
+        updateUser.fulfilled,
+        (state, { payload }: PayloadAction<TUser>) => {
+          state.data = payload;
+          state.requestStatus = RequestStatus.Success;
+          state.isAuthChecked = true;
+        }
+      )
       .addCase(checkUserAuth.pending, (state) => {
         state.requestStatus = RequestStatus.Loading;
+        state.isAuthChecked = false;
       })
       .addCase(checkUserAuth.rejected, (state) => {
         state.requestStatus = RequestStatus.Failed;
@@ -101,9 +139,22 @@ export const userSlice = createSlice({
           state.requestStatus = RequestStatus.Success;
           state.isAuthChecked = true;
         }
-      );
+      )
+      .addCase(logoutUser.pending, (state) => {
+        state.requestStatus = RequestStatus.Loading;
+        state.isAuthChecked = false;
+      })
+      .addCase(logoutUser.rejected, (state) => {
+        state.requestStatus = RequestStatus.Failed;
+        state.isAuthChecked = true;
+      })
+      .addCase(logoutUser.fulfilled, (state) => {
+        state.data = null;
+        state.requestStatus = RequestStatus.Success;
+        state.isAuthChecked = true;
+      });
   }
 });
+
 export const { isAuthCheckedSelector, userDataSelector, userDataNameSelector } =
   userSlice.selectors;
-export const { authChecked } = userSlice.actions;

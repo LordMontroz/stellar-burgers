@@ -1,7 +1,6 @@
 import { useSelector } from '../../services/store';
-import { Navigate } from 'react-router';
 import { Preloader } from '../ui/preloader';
-import { useLocation } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { isAuthCheckedSelector, userDataSelector } from '../../slices/user';
 type ProtectedRouteProps = {
   onlyUnAuth?: boolean;

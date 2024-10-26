@@ -1,6 +1,11 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { RequestStatus, TOrder } from '@utils-types';
-import { TNewOrderResponse, orderBurgerApi } from '../utils/burger-api';
+import {
+  TNewOrderResponse,
+  TOrderResponse,
+  getOrderByNumberApi,
+  orderBurgerApi
+} from '../utils/burger-api';
 import { clearBurgerConstructor } from './burgerConstructor';
 
 interface orderState {
@@ -22,6 +27,13 @@ export const createOrder = createAsyncThunk(
   }
 );
 
+export const getOrder = createAsyncThunk(
+  'order/getId',
+  async (id_order: number) => {
+    const data = await getOrderByNumberApi(id_order);
+    return data;
+  }
+);
 export const orderSlice = createSlice({
   name: 'order',
   initialState,
@@ -47,6 +59,19 @@ export const orderSlice = createSlice({
         }
       )
       .addCase(createOrder.rejected, (state) => {
+        state.status = RequestStatus.Failed;
+      })
+      .addCase(getOrder.pending, (state) => {
+        state.status = RequestStatus.Loading;
+      })
+      .addCase(
+        getOrder.fulfilled,
+        (state, { payload }: PayloadAction<TOrderResponse>) => {
+          state.status = RequestStatus.Success;
+          state.info = payload.orders[0];
+        }
+      )
+      .addCase(getOrder.rejected, (state) => {
         state.status = RequestStatus.Failed;
       });
   }
