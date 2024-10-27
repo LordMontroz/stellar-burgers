@@ -13,12 +13,15 @@ import {
   getOrderSelector
 } from '@slices/orderSlice';
 import { useParams } from 'react-router-dom';
+import { isModalOpenSelector } from '@slices/modalSlice';
+import { OrderInfoWithHeaderUI } from '../ui/order-info/order-info-withHeader';
 
 export const OrderInfo: FC = () => {
   const dispatch = useDispatch();
   const orderData = useSelector(getOrderSelector);
   const orderNumber = Number(useParams().number);
   const ingredients: TIngredient[] = useSelector(getIngredientsSelector);
+  const inModal = useSelector(isModalOpenSelector);
 
   useEffect(() => {
     if (orderNumber) {
@@ -78,5 +81,9 @@ export const OrderInfo: FC = () => {
     return <Preloader />;
   }
 
-  return <OrderInfoUI orderInfo={orderInfo} />;
+  if (inModal) {
+    return <OrderInfoUI orderInfo={orderInfo} />;
+  }
+
+  return <OrderInfoWithHeaderUI orderInfo={orderInfo} />;
 };

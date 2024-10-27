@@ -20,7 +20,8 @@ export const ProtectedRoute = ({
     return <Navigate to='/login' state={{ from: location }} />;
   }
   if (onlyUnAuth && userAuth) {
-    return <Navigate replace to='/' />;
+    const from = location.state?.from || { pathname: '/' };
+    return <Navigate replace to={from} />;
   }
   return children;
 };
