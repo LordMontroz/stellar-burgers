@@ -119,7 +119,7 @@ const App = () => {
           <Route
             path='/feed/:number'
             element={
-               <Modal
+              <Modal
                 title={orderData ? `#${orderData.number}` : ''}
                 onClose={() => navigate('/feed')}
               >

@@ -9,7 +9,6 @@ import { closeModal, openModal } from '@slices/modalSlice';
 const modalRoot = document.getElementById('modals');
 
 export const Modal: FC<TModalProps> = memo(({ title, onClose, children }) => {
-
   const dispatch = useDispatch();
 
   useEffect(() => {
