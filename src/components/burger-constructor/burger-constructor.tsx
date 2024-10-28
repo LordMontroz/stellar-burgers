@@ -11,7 +11,7 @@ import {
   makeOrder,
   getOrderSelector,
   orderLoadingSelector
-} from from '@slices/orderSlice/orderSlice';
+} from '@slices/orderSlice/orderSlice';
 import { useNavigate } from 'react-router-dom';
 import { isAuthUserSelector } from '@slices/userProfileSlice/userProfileSlice';
 
