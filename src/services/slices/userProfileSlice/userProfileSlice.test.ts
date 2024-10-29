@@ -10,6 +10,17 @@ import {
   initialState
 } from './userProfileSlice';
 describe('тесты регистрации пользователя', () => {
+
+  const initialState = {
+    user: {
+      name: '',
+      email: ''
+    },
+    isAuthChecked: false,
+    loading: false,
+    error: null
+  };
+
   test('успешная регистрация пользователя', () => {
     const newState = reducer(
       initialState,
@@ -42,6 +53,16 @@ describe('тесты регистрации пользователя', () => {
   });
 });
 describe('тесты входа пользователя в профиль', () => {
+
+  const initialState = {
+    user: {
+      name: '',
+      email: ''
+    },
+    isAuthChecked: false,
+    loading: false,
+    error: null
+  };
   test('успешный вход пользователя', () => {
     const newState = reducer(
       initialState,
@@ -74,6 +95,7 @@ describe('тесты входа пользователя в профиль', () 
   });
 });
 describe('тесты обновления данных пользователя', () => {
+
   test('успешное обновлениe данных', () => {
     const action = {
       type: updateUser.fulfilled.type,
@@ -113,6 +135,7 @@ describe('тесты обновления данных пользователя'
   });
 });
 describe('тесты выхода из личного кабинета пользователя', () => {
+
   test('успешный выход', () => {
     const action = {
       type: logoutUser.fulfilled.type,
@@ -149,6 +172,7 @@ describe('тесты выхода из личного кабинета поль�
   });
 });
 describe('тесты получения данных пользователя', () => {
+
   const userMockData = {
     name: 'Some name',
     email: 'some@email.ru'
@@ -187,6 +211,7 @@ describe('тесты получения данных пользователя', 
   });
 });
 describe('тесты авторизации пользователя', () => {
+
   test('успешная проверка авторизации', () => {
     const action = { type: checkUserAuth.fulfilled.type };
     const newState = reducer(initialState, action);
