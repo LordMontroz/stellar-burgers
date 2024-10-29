@@ -17,6 +17,7 @@ type TUserState = {
   loading: boolean;
   error: string | null;
 };
+
 export const initialState: TUserState = {
   user: {
     name: 'Some name',
@@ -26,6 +27,17 @@ export const initialState: TUserState = {
   loading: false,
   error: null
 };
+
+export const initialStates: TUserState = {
+  user: {
+    name: '',
+    email: ''
+  },
+  isAuthChecked: false,
+  loading: false,
+  error: null
+};
+
 // AsyncThunk
 export const registerUser = createAsyncThunk<TUser, TRegisterData>(
   'user/register',

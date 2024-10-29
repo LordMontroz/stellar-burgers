@@ -7,23 +7,14 @@ import {
   logoutUser,
   getUserData,
   checkUserAuth,
-  initialState
+  initialState,
+  initialStates
 } from './userProfileSlice';
 describe('тесты регистрации пользователя', () => {
 
-  const initialState = {
-    user: {
-      name: '',
-      email: ''
-    },
-    isAuthChecked: false,
-    loading: false,
-    error: null
-  };
-
   test('успешная регистрация пользователя', () => {
     const newState = reducer(
-      initialState,
+      initialStates,
       registerUser.fulfilled(userMockData, 'fulfilled', registerMockData)
     );
     expect(newState.user).toEqual(userMockData);
@@ -33,39 +24,31 @@ describe('тесты регистрации пользователя', () => {
   });
   test('проверка статуса загрузки при регистрации пользователя', () => {
     const newState = reducer(
-      initialState,
+      initialStates,
       registerUser.pending('pending', registerMockData)
     );
-    expect(newState.user).toEqual(initialState.user);
+    expect(newState.user).toEqual(initialStates.user);
     expect(newState.isAuthChecked).toBe(false);
     expect(newState.loading).toBe(true);
     expect(newState.error).toBe(null);
   });
   test('проверка ошибки при регистрации пользователя', () => {
     const newState = reducer(
-      initialState,
+      initialStates,
       registerUser.rejected(new Error('rejected'), 'rejected', registerMockData)
     );
-    expect(newState.user).toEqual(initialState.user);
+    expect(newState.user).toEqual(initialStates.user);
     expect(newState.isAuthChecked).toBe(false);
     expect(newState.loading).toBe(false);
     expect(newState.error).toBe(newState.error);
   });
 });
+
 describe('тесты входа пользователя в профиль', () => {
 
-  const initialState = {
-    user: {
-      name: '',
-      email: ''
-    },
-    isAuthChecked: false,
-    loading: false,
-    error: null
-  };
   test('успешный вход пользователя', () => {
     const newState = reducer(
-      initialState,
+      initialStates,
       loginUser.fulfilled(userMockData, 'fulfilled', loginMockData)
     );
     expect(newState.user).toEqual(userMockData);
@@ -75,25 +58,26 @@ describe('тесты входа пользователя в профиль', () 
   });
   test('проверка статуса загрузки при входе в личный кабинет пользователя', () => {
     const newState = reducer(
-      initialState,
+      initialStates,
       loginUser.pending('pending', loginMockData)
     );
-    expect(newState.user).toEqual(initialState.user);
+    expect(newState.user).toEqual(initialStates.user);
     expect(newState.isAuthChecked).toBe(false);
     expect(newState.loading).toBe(true);
     expect(newState.error).toBe(null);
   });
   test('проверка ошибки при входе в личный кабинет пользователя', () => {
     const newState = reducer(
-      initialState,
+      initialStates,
       loginUser.rejected(new Error('rejected'), 'rejected', loginMockData)
     );
-    expect(newState.user).toEqual(initialState.user);
+    expect(newState.user).toEqual(initialStates.user);
     expect(newState.isAuthChecked).toBe(false);
     expect(newState.loading).toBe(false);
     expect(newState.error).toBe(newState.error);
   });
 });
+
 describe('тесты обновления данных пользователя', () => {
 
   test('успешное обновлениe данных', () => {
@@ -112,6 +96,7 @@ describe('тесты обновления данных пользователя'
     expect(newState.loading).toBe(false);
     expect(newState.error).toBe(null);
   });
+
   test('проверка статуса загрузки при обновлении данных', () => {
     const newState = reducer(
       initialState,
@@ -122,6 +107,7 @@ describe('тесты обновления данных пользователя'
     expect(newState.loading).toBe(true);
     expect(newState.error).toBe(null);
   });
+
   test('проверка ошибки при обновлении данных', () => {
     const error = new Error('Ошибка');
     const newState = reducer(
@@ -134,6 +120,7 @@ describe('тесты обновления данных пользователя'
     expect(newState.error).toBe(error.message);
   });
 });
+
 describe('тесты выхода из личного кабинета пользователя', () => {
 
   test('успешный выход', () => {
