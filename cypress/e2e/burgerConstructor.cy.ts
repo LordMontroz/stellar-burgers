@@ -63,12 +63,11 @@ describe('тесты конструктора бургера', () => {
 
   it('создает и оформляет заказ', () => {
     cy.wait('@getUser');
-    cy.get('[data-cy=bun] button').first().click();
-    cy.get('[data-cy=main] button').first().click();
-    cy.get('[data-cy=sauce] button').first().click();
+    cy.clickIngredient('bun');
+    cy.clickIngredient('main');
+    cy.clickIngredient('sauce');
     cy.get('[data-cy=order-button]').click();
     cy.isModalIngredient(true).should('contain', OrderFixture.order.number);
-    cy.wait(500);
     cy.closeModal();
     cy.isModalIngredient(false);
     cy.get('@ingredients').should('contain', 'Выберите начинку');
