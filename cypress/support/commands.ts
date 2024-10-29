@@ -12,12 +12,12 @@ Cypress.Commands.add('closeModal', () => {
     cy.get('[data-cy=modal-close]').click();
   });
   
-  //Добавляем ингредиент в конструктор
-  Cypress.Commands.add('addIngredients', (ingredientIdArr) => {
-    ingredientIdArr.forEach((id) => {
-      cy.get(`[data-cy=ingredient-${id}]`).contains('Добавить').click();
-    });
-  });
+//   //Добавляем ингредиент в конструктор
+//   Cypress.Commands.add('addIngredients', (TTabMode) => {
+//     ingredientIdArr.forEach((id) => {
+//       cy.get(`[data-cy=TTabMode-${id}]`).contains('Добавить').click();
+//     });
+//   });
   
   //Кликаем на ингредиент
   Cypress.Commands.add('clickIngredient', (TTabMode) => {
