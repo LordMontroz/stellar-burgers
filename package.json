@@ -32,6 +32,7 @@
     "@babel/preset-env": "^7.26.0",
     "@babel/preset-react": "^7.25.9",
     "@babel/preset-typescript": "^7.26.0",
+    "@jest/globals": "^29.7.0",
     "@storybook/addon-essentials": "^7.6.20",
     "@storybook/addon-interactions": "^7.6.20",
     "@storybook/addon-links": "^7.6.20",
@@ -90,7 +91,9 @@
     "build-storybook": "storybook build",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx ./src",
     "lint:fix": "npm run lint -- --fix",
-    "format": "prettier ./src --write"
+    "format": "prettier ./src --write",
+    "test": "jest",
+    "cypress": "cypress open cache clear"
   },
   "eslintConfig": {
     "extends": [
