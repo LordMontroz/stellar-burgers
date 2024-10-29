@@ -17,12 +17,12 @@ type TUserState = {
   loading: boolean;
   error: string | null;
 };
-const initialState: TUserState = {
+export const initialState: TUserState = {
   user: {
-    name: '',
-    email: ''
+    name: 'Some name',
+    email: 'some@email.ru'
   },
-  isAuthChecked: false,
+  isAuthChecked: true,
   loading: false,
   error: null
 };

@@ -1,10 +1,6 @@
-import { makeOrder, getOrderByNumber, reducer } from './orderSlice';
+import { makeOrder, getOrderByNumber, reducer, initialState } from './orderSlice';
 describe('тесты на проверку заказа', () => {
-  const initialState = {
-    order: null,
-    loading: false,
-    error: null
-  };
+
   test('успешно сделан заказ', () => {
     const action = {
       type: makeOrder.fulfilled.type,

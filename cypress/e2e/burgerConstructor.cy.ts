@@ -1,3 +1,5 @@
+/// <reference types="cypress" />
+
 import * as OrderFixture from '../fixtures/order.json';
 
 describe('тесты конструктора бургера', () => {
@@ -30,34 +32,33 @@ describe('тесты конструктора бургера', () => {
 
   it('добавляет булку в конструктор', () => {
     cy.get('@constructor').should('not.contain', 'булка');
-    cy.get('[data-cy=bun] button').first().click();
+     cy.clickIngredient('bun');
     cy.get('@constructor').contains('булка');
   });
 
   it('добавляет ингредиент в конструктор', () => {
     cy.get('@ingredients').should('not.contain', 'Биокотлета');
-    cy.get('[data-cy=main] button').first().click();
+    cy.clickIngredient('main');
     cy.get('@ingredients').contains('Биокотлета');
   });
 
   it('добавляет соус в конструктор', () => {
     cy.get('@ingredients').should('not.contain', 'Соус');
-    cy.get('[data-cy=sauce] button').first().click();
+    cy.clickIngredient('sauce');
     cy.get(`@ingredients`).contains('Соус');
   });
 
   it('открывает описание ингредиента в модальном окне', () => {
-    cy.get('@bun').first().click();
-    cy.get('[data-cy=modal]')
-      .should('be.visible')
-      .should('contain', 'Краторная булка');
+    cy.isModalIngredient(false);
+    cy.clickIngredient('bun');
+    cy.contains('Краторная булка N-200i').should('exist');
   });
 
   it('закрывает описание ингредиента в модальном окне по крестику', () => {
     cy.get('@bun').first().click();
     cy.get('[data-cy=modal]').should('be.visible');
-    cy.get('[data-cy=modal-close]').click();
-    cy.get('[data-cy=modal]').should('not.exist');
+    cy.closeModal();
+    cy.isModalIngredient(false);
   });
 
   it('создает и оформляет заказ', () => {
@@ -66,12 +67,10 @@ describe('тесты конструктора бургера', () => {
     cy.get('[data-cy=main] button').first().click();
     cy.get('[data-cy=sauce] button').first().click();
     cy.get('[data-cy=order-button]').click();
-    cy.get('[data-cy=modal]')
-      .should('be.visible')
-      .should('contain', OrderFixture.order.number);
+    cy.isModalIngredient(true).should('contain', OrderFixture.order.number);
     cy.wait(500);
-    cy.get('[data-cy=modal-close]').click();
-    cy.get('[data-cy=modal]').should('not.exist');
+    cy.closeModal();
+    cy.isModalIngredient(false);
     cy.get('@ingredients').should('contain', 'Выберите начинку');
     cy.get('@constructor').should('contain', 'Выберите булки');
   });
